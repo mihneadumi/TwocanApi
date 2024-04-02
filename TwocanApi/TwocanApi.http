@@ -1,0 +1,6 @@
+@TwocanApi_HostAddress = http://localhost:5265
+
+GET {{TwocanApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
