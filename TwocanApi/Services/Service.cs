@@ -28,7 +28,7 @@ public class Service
 
     public void AddPost(Post post)
     {
-        post.Id = repository.GetPosts().Max(p => p.Id) + 1;
+        post.id = repository.GetPosts().Max(p => p.id) + 1;
         repository.AddPost(post);
     }
 

@@ -26,11 +26,38 @@ namespace TwocanApi.Controllers
         [HttpPost("posts/add", Name = "AddPost")]
         public IActionResult AddPost([FromBody] Post post)
         {
-            if (post == null || post.Title == "")
+            if (post == null)
             {
-                return BadRequest();
+                return BadRequest("Post object cannot be deserialized");
             }
             service.AddPost(post);
+            return Ok();
+        }
+
+        [HttpDelete("posts/delete/{postId}", Name = "DeletePost")]
+        public IActionResult RemovePost(int postId)
+        {
+            try
+            {
+                service.RemovePost(postId);
+            } catch
+            {
+                return NotFound("Post not found");
+            }
+            return Ok();
+        }
+
+        [HttpPut("posts/update", Name = "UpdatePost")]
+        public IActionResult UpdatePost([FromBody] Post post)
+        {
+            try
+            {
+                service.UpdatePost(post);
+            }
+            catch
+            {
+                return NotFound("Post not found");
+            }
             return Ok();
         }
 

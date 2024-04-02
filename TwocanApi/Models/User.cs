@@ -3,12 +3,12 @@ namespace TwocanApi.Models;
 
 public class User
 {
-    public int Id { get; set; }
-    public required string Username { get; set; }
-    public required string DisplayName { get; set; }
-    public int Posts { get; set; }
-    public int Followers { get; set; }
-    public int Following { get; set; }
-    public required string Bio { get; set; }
+    public int id { get; set; }
+    public required string username { get; set; }
+    public required string displayName { get; set; }
+    public int posts { get; set; }
+    public int followers { get; set; }
+    public int following { get; set; }
+    public required string bio { get; set; }
 
 }
