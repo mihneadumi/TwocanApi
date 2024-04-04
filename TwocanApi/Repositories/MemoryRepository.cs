@@ -29,7 +29,6 @@ public class MemoryRepository: IRepository
             title = "Hey y'all",
             score = 9,
             date = "2024-02-14",
-            content = "I am really happy to see you guys here, honestly"
         },
 
         new Post {
@@ -86,10 +85,10 @@ public class MemoryRepository: IRepository
         new Post {
             id = 9,
             authorId = 3,
-            title = "O noapte in Medellin",
+            title = "O noapte",
             score = 6,
             date = "2024-03-16",
-            content = "Hai sa fugim o noapte in Medellin, sa ne bucuram putin, eu de tine tu de viiiiiin."
+            content = "TEEEEEEEEEEEEEEEEE EEEEEEEEEEEE EEEEEEEEE EEEEEEEEEEEE EEEEEEEEEEE EEEEEEEEEE EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEXT."
         }
     ];
 	static List<User> users = [

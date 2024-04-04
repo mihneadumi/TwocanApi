@@ -23,6 +23,12 @@ namespace TwocanApi.Controllers
             return service.GetPosts();
         }
 
+        [HttpGet("posts/{postId}", Name = "GetPost")]
+        public Post GetPost(int postId)
+        {
+            return service.GetPost(postId);
+        }
+
         [HttpPost("posts/add", Name = "AddPost")]
         public IActionResult AddPost([FromBody] Post post)
         {
@@ -31,7 +37,7 @@ namespace TwocanApi.Controllers
                 return BadRequest("Post object cannot be deserialized");
             }
             service.AddPost(post);
-            return Ok();
+            return Ok("Post added");
         }
 
         [HttpDelete("posts/delete/{postId}", Name = "DeletePost")]
@@ -44,7 +50,7 @@ namespace TwocanApi.Controllers
             {
                 return NotFound("Post not found");
             }
-            return Ok();
+            return Ok("Post removed");
         }
 
         [HttpPut("posts/update", Name = "UpdatePost")]
@@ -58,7 +64,7 @@ namespace TwocanApi.Controllers
             {
                 return NotFound("Post not found");
             }
-            return Ok();
+            return Ok("Post updated");
         }
 
     }
