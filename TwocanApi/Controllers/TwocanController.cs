@@ -2,6 +2,7 @@
 using TwocanApi.Models;
 using TwocanApi.Services;
 using TwocanApi.Repositories;
+using Microsoft.Extensions.Hosting;
 
 namespace TwocanApi.Controllers
 {
@@ -25,11 +26,24 @@ namespace TwocanApi.Controllers
             while (true)
             {
                 _service.generatePosts();
-                await Response.WriteAsync($"posts generated:\n\n");
+                await Response.WriteAsync($"event: message\n");
+                await Response.WriteAsync($"data: added new posts\n\n");
                 await Response.Body.FlushAsync(); // clear response buffer
                 await Task.Delay(5000); // simulate delay between events
             }
         }
+        [HttpPut("setBotsNumber/{n}")]
+        public IActionResult SetBotsNumber(int n)
+        {
+            if (n < 0)
+            {
+                return BadRequest("Number of bots cannot be negative");
+            }
+
+            _service.nrPostsToGenerate = n;
+            return Ok("Number of bots set to " + n);
+        }
+
         [HttpGet("posts", Name = "GetPosts")]
         public IEnumerable<Post> GetPosts()
         {

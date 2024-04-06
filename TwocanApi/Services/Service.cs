@@ -10,8 +10,7 @@ public class Service : IService
     public Service(IRepository repository)
     {
         this.repository = repository;
-        nrPostsToGenerate = 3;
-        generatePosts(20);
+        generatePosts(10);
     }
 
     public List<Post> GetPosts()
