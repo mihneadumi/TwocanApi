@@ -9,24 +9,37 @@ namespace TwocanApi.Controllers
     [Route("twocan")]
     public class TwocanController : Controller
     {
-        private readonly Service service;
+        private readonly IService _service;
         private readonly ILogger<TwocanController> _logger;
 
-        public TwocanController(ILogger<TwocanController> logger)
+        public TwocanController(ILogger<TwocanController> logger, IService service)
         {
             _logger = logger;
-            service = new Service(new MemoryRepository());
+            _service = service;
+        }
+
+        [HttpGet("postStream")]
+        public async Task StreamEvents()
+        {
+            Response.Headers.Add("Content-Type", "text/event-stream");
+            while (true)
+            {
+                _service.generatePosts();
+                await Response.WriteAsync($"posts generated:\n\n");
+                await Response.Body.FlushAsync(); // clear response buffer
+                await Task.Delay(5000); // simulate delay between events
+            }
         }
         [HttpGet("posts", Name = "GetPosts")]
         public IEnumerable<Post> GetPosts()
         {
-            return service.GetPosts();
+            return _service.GetPosts();
         }
 
         [HttpGet("posts/{postId}", Name = "GetPost")]
         public Post GetPost(int postId)
         {
-            return service.GetPost(postId);
+            return _service.GetPost(postId);
         }
 
         [HttpPost("posts/add", Name = "AddPost")]
@@ -36,7 +49,7 @@ namespace TwocanApi.Controllers
             {
                 return BadRequest("Post object cannot be deserialized");
             }
-            service.AddPost(post);
+            _service.AddPost(post);
             return Ok("Post added");
         }
 
@@ -45,7 +58,7 @@ namespace TwocanApi.Controllers
         {
             try
             {
-                service.RemovePost(postId);
+                _service.RemovePost(postId);
             } catch
             {
                 return NotFound("Post not found");
@@ -58,7 +71,7 @@ namespace TwocanApi.Controllers
         {
             try
             {
-                service.UpdatePost(post);
+                _service.UpdatePost(post);
             }
             catch
             {

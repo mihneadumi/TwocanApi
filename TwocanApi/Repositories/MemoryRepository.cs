@@ -136,7 +136,11 @@ public class MemoryRepository: IRepository
     public List<Post> GetPosts() { return posts; }
     public List<User> GetUsers() {  return users; }
 
-    public void AddPost(Post post) { posts.Add(post);}
+    public void AddPost(Post post)
+    {
+        post.id = posts.Max(p => p.id) + 1;
+        posts.Add(post);
+    }
 
     public Post GetPost(int id) { return posts.Find(p => p.id == id)?? throw new Exception("Post not found"); }
 

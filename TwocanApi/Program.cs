@@ -1,5 +1,6 @@
 
 using TwocanApi.Repositories;
+using TwocanApi.Services;
 
 namespace TwocanApi
 {
@@ -15,7 +16,8 @@ namespace TwocanApi
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-            builder.Services.AddScoped<IRepository, MemoryRepository>();
+            builder.Services.AddSingleton<IRepository, MemoryRepository>();
+            builder.Services.AddSingleton<IService, Service>();
 
             var app = builder.Build();
 

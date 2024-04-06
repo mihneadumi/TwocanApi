@@ -2,13 +2,16 @@ using TwocanApi.Repositories;
 using TwocanApi.Models;
 namespace TwocanApi.Services;
 
-public class Service
+public class Service : IService
 {
     IRepository repository;
+    public int nrPostsToGenerate { get; set;} = 0;
 
     public Service(IRepository repository)
     {
         this.repository = repository;
+        nrPostsToGenerate = 3;
+        generatePosts(20);
     }
 
     public List<Post> GetPosts()
@@ -28,7 +31,6 @@ public class Service
 
     public void AddPost(Post post)
     {
-        post.id = repository.GetPosts().Max(p => p.id) + 1;
         repository.AddPost(post);
     }
 
@@ -40,6 +42,28 @@ public class Service
     public void UpdatePost(Post post)
     {
         repository.UpdatePost(post);
+    }
+
+    public void generatePosts(int n)
+    {
+        var maxUserId = repository.GetUsers().Max(u => u.id);
+        for(int i = 0; i < n; i++)
+        {
+            Post post = new Post
+            {
+                id = 0,
+                authorId = Faker.RandomNumber.Next(0, maxUserId),
+                title = Faker.Lorem.Sentence(),
+                content = String.Join(" ", Faker.Lorem.Sentences(3)),
+                score = Faker.RandomNumber.Next(0, 15),
+        };
+            AddPost(post);
+        }   
+    }
+
+    public void generatePosts()
+    {
+        generatePosts(this.nrPostsToGenerate);
     }
 
 }
