@@ -96,7 +96,7 @@ public class MemoryRepository: IRepository
             id = 0,
             username = "aliciaH",
             displayName = "Alicia H",
-            posts = 2,
+            posts = [0, 4, 5, 7],
             followers = 0,
             following = 0,
             bio = "I am a developer"
@@ -105,7 +105,7 @@ public class MemoryRepository: IRepository
             id = 1,
             username = "billyBal",
             displayName = "Billy Balosu",
-            posts = 1,
+            posts = [1, 6, 8],
             followers = 0,
             following = 0,
             bio = "I am definitely not a bot"
@@ -115,7 +115,7 @@ public class MemoryRepository: IRepository
             id = 2,
             username = "SunshineLove123",
             displayName = "Samira",
-            posts = 1,
+            posts = [2, 8],
             followers = 0,
             following = 0,
             bio = "It is always sunny in my world"
@@ -124,7 +124,7 @@ public class MemoryRepository: IRepository
             id = 3,
             username = "ye",
             displayName = "Kanye East",
-            posts = 1,
+            posts = [3, 9],
             followers = 0,
             following = 0,
             bio = "I am the Greatest artist of all T I M E"
@@ -139,6 +139,9 @@ public class MemoryRepository: IRepository
     public void AddPost(Post post)
     {
         post.id = posts.Max(p => p.id) + 1;
+        var author = users.Find(u => u.id == post.authorId);
+        if (author == null) throw new Exception("Author not found");
+        author.posts.Add(post.id);
         posts.Add(post);
     }
 
@@ -148,6 +151,9 @@ public class MemoryRepository: IRepository
     {
         var post = posts.Find(p => p.id == id);
         if (post == null) throw new Exception("Post not found");
+        var author = users.Find(u => u.id == post.authorId);
+        if (author == null) throw new Exception("Author not found");
+        author.posts.Remove(post.id);
         posts.Remove(post);
     }
 
@@ -158,5 +164,29 @@ public class MemoryRepository: IRepository
         dbPpost.title = post.title;
         dbPpost.content = post.content;
     }
+
+    public void AddUser(User user)
+    {
+        user.id = users.Max(u => u.id) + 1;
+        users.Add(user);
+    }
+
+    public User GetUser(int id) { return users.Find(u => u.id == id)?? throw new Exception("User not found"); }
+
+    public void RemoveUser(int id)
+    {
+        var user = users.Find(u => u.id == id);
+        if (user == null) throw new Exception("User not found");
+        users.Remove(user);
+    }
+
+    public void UpdateUser(User user)
+    {
+        User dbUser = users.Find(u => u.id == user.id);
+        if (dbUser == null) throw new Exception("User not found");
+        dbUser.displayName = user.displayName;
+        dbUser.bio = user.bio;
+    }
+
 
 }

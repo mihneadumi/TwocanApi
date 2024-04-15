@@ -12,4 +12,9 @@ public interface IRepository
     public Post GetPost(int id);
     public void RemovePost(int id);
     public void UpdatePost(Post post);
+
+    public void AddUser(User user);
+    public User GetUser(int id);
+    public void RemoveUser(int id);
+    public void UpdateUser(User user);
 }

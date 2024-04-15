@@ -50,7 +50,6 @@ public class Service : IService
         {
             Post post = new Post
             {
-                id = 0,
                 authorId = Faker.RandomNumber.Next(0, maxUserId),
                 title = Faker.Lorem.Sentence(),
                 content = String.Join(" ", Faker.Lorem.Sentences(3)),
@@ -65,4 +64,28 @@ public class Service : IService
         generatePosts(this.nrPostsToGenerate);
     }
 
+    public User GetUser(int id)
+    {
+        return repository.GetUser(id);
+    }
+
+    public void AddUser(User user)
+    {
+        repository.AddUser(user);
+    }
+
+    public void RemoveUser(int id)
+    {
+        repository.RemoveUser(id);
+    }
+
+    public void UpdateUser(User user)
+    {
+        repository.UpdateUser(user);
+    }
+
+    public List<Post> GetUserPosts(int userId)
+    {
+        return repository.GetPosts().Where(p => p.authorId == userId).ToList();
+    }
 }

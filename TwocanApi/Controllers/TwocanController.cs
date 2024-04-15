@@ -29,7 +29,7 @@ namespace TwocanApi.Controllers
                 await Response.WriteAsync($"event: message\n");
                 await Response.WriteAsync($"data: added new posts\n\n");
                 await Response.Body.FlushAsync(); // clear response buffer
-                await Task.Delay(5000); // simulate delay between events
+                await Task.Delay(10000); // simulate delay between events
             }
         }
         [HttpPut("setBotsNumber/{n}")]
@@ -94,5 +94,61 @@ namespace TwocanApi.Controllers
             return Ok("Post updated");
         }
 
+        [HttpGet("users", Name = "GetUsers")]
+        public IEnumerable<User> GetUsers()
+        {
+            return _service.GetUsers();
+        }
+
+        [HttpGet("users/{userId}", Name = "GetUser")]
+        public User GetUser(int userId)
+        {
+            return _service.GetUser(userId);
+        }
+
+        [HttpPost("users/add", Name = "AddUser")]
+        public IActionResult AddUser([FromBody] User user)
+        {
+            if (user == null)
+            {
+                return BadRequest("User object cannot be deserialized");
+            }
+            _service.AddUser(user);
+            return Ok("User added");
+        }
+
+        [HttpDelete("users/delete/{userId}", Name = "DeleteUser")]
+        public IActionResult RemoveUser(int userId)
+        {
+            try
+            {
+                _service.RemoveUser(userId);
+            }
+            catch
+            {
+                return NotFound("User not found");
+            }
+            return Ok("User removed");
+        }
+
+        [HttpPut("users/update", Name = "UpdateUser")]
+        public IActionResult UpdateUser([FromBody] User user)
+        {
+            try
+            {
+                _service.UpdateUser(user);
+            }
+            catch
+            {
+                return NotFound("User not found");
+            }
+            return Ok("User updated");
+        }
+
+        [HttpGet("users/{userId}/posts", Name = "GetUserPosts")]
+        public IEnumerable<Post> GetUserPosts(int userId)
+        {
+            return _service.GetUserPosts(userId);
+        }
     }
 }
