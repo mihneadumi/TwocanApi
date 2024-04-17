@@ -18,12 +18,16 @@ namespace TwocanApi
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-            builder.Services.AddSingleton<IRepository, MemoryRepository>();
-            builder.Services.AddSingleton<IService, Service>();
+
+            //builder.Services.AddSingleton<IRepository, MemoryRepository>();
+            //builder.Services.AddSingleton<IService, Service>();
+
+            builder.Services.AddScoped<IRepository, SqlRepository>();
+            builder.Services.AddScoped<IService, Service>();
 
             builder.Services.AddDbContext<DataContext>(options =>
             {
-                options.UseSqlServer(builder.Configuration.GetConnectionString("Default"));
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
 
             var app = builder.Build();

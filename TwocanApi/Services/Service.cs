@@ -1,5 +1,6 @@
 using TwocanApi.Repositories;
 using TwocanApi.Models;
+using Microsoft.EntityFrameworkCore;
 namespace TwocanApi.Services;
 
 public class Service : IService
@@ -10,7 +11,6 @@ public class Service : IService
     public Service(IRepository repository)
     {
         this.repository = repository;
-        generatePosts(10);
     }
 
     public List<Post> GetPosts()
@@ -45,7 +45,9 @@ public class Service : IService
 
     public void generatePosts(int n)
     {
-        var maxUserId = repository.GetUsers().Max(u => u.id);
+        if (n <= 0) return;
+        if (repository.GetUsers().Count == 0) return;
+        var maxUserId = repository.GetUsers().Count != 1 ? repository.GetUsers().Max(u => u.id) : 0;
         for(int i = 0; i < n; i++)
         {
             Post post = new Post
@@ -86,6 +88,6 @@ public class Service : IService
 
     public List<Post> GetUserPosts(int userId)
     {
-        return repository.GetPosts().Where(p => p.authorId == userId).ToList();
+        return repository.GetUserPosts(userId);
     }
 }

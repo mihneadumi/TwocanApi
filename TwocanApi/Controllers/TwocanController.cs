@@ -57,12 +57,19 @@ namespace TwocanApi.Controllers
         }
 
         [HttpPost("posts/add", Name = "AddPost")]
-        public IActionResult AddPost([FromBody] Post post)
-        {
-            if (post == null)
+        public IActionResult AddPost([FromBody] PostDTO postDTO)
+        {   
+            if (postDTO == null)
             {
                 return BadRequest("Post object cannot be deserialized");
             }
+            var post = new Post
+            {
+                authorId = postDTO.authorId,
+                title = postDTO.title,
+                content = postDTO.content,
+                author = _service.GetUser(postDTO.authorId),
+            };
             _service.AddPost(post);
             return Ok("Post added");
         }
@@ -81,15 +88,26 @@ namespace TwocanApi.Controllers
         }
 
         [HttpPut("posts/update", Name = "UpdatePost")]
-        public IActionResult UpdatePost([FromBody] Post post)
+        public IActionResult UpdatePost([FromBody] PostDTO PostDTO)
         {
             try
             {
+                var oldPost = _service.GetPost(PostDTO.id??0);
+                var post = new Post
+                {
+                    id = PostDTO.id??0,
+                    title = PostDTO.title,
+                    content = PostDTO.content,
+                    authorId = oldPost.authorId,
+                    date = oldPost.date,
+                    author = _service.GetUser(oldPost.authorId),
+                    score = oldPost.score,
+                };
                 _service.UpdatePost(post);
             }
-            catch
+            catch (Exception e) 
             {
-                return NotFound("Post not found");
+                return NotFound(e.Message);
             }
             return Ok("Post updated");
         }

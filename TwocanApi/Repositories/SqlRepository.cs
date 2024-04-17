@@ -1,15 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Microsoft.EntityFrameworkCore;
+using TwocanApi.Data;
 using TwocanApi.Models;
 
 namespace TwocanApi.Repositories
 {
     public class SqlRepository : IRepository
     {
-        private readonly YourDbContext _context;
+        public readonly DataContext _context;
 
-        public SqlRepository(YourDbContext context)
+        public SqlRepository(DataContext context)
         {
             _context = context;
         }
@@ -32,22 +31,43 @@ namespace TwocanApi.Repositories
 
         public Post GetPost(int id)
         {
-            return _context.Posts.FirstOrDefault(p => p.Id == id) ?? throw new Exception("Post not found");
+            return _context.Posts.FirstOrDefault(p => p.id == id);
         }
 
         public void RemovePost(int id)
         {
-            var post = _context.Posts.Find(id);
-            if (post == null)
-                throw new Exception("Post not found");
-
-            _context.Posts.Remove(post);
-            _context.SaveChanges();
+            var post = GetPost(id);
+            if (post != null)
+            {
+                _context.Posts.Remove(post);
+                _context.SaveChanges();
+            }
         }
 
         public void UpdatePost(Post post)
         {
-            _context.Posts.Update(post);
+            var existingPost = _context.Posts.FirstOrDefault(p => p.id == post.id);
+            if (existingPost == null)
+            {
+                throw new Exception("Post not found");
+            }
+
+            if (existingPost.authorId != post.authorId)
+            {
+                throw new Exception("Cannot change author of post");
+            }
+
+            if (existingPost.date != post.date)
+            {
+                throw new Exception("Cannot change date of post");
+            }
+
+            // Detach the existing post entity
+            _context.Entry(existingPost).State = EntityState.Detached;
+
+            // Attach the updated post entity
+            _context.Entry(post).State = EntityState.Modified;
+
             _context.SaveChanges();
         }
 
@@ -59,23 +79,28 @@ namespace TwocanApi.Repositories
 
         public User GetUser(int id)
         {
-            return _context.Users.FirstOrDefault(u => u.Id == id) ?? throw new Exception("User not found");
+            return _context.Users.FirstOrDefault(u => u.id == id);
         }
 
         public void RemoveUser(int id)
         {
-            var user = _context.Users.Find(id);
-            if (user == null)
-                throw new Exception("User not found");
-
-            _context.Users.Remove(user);
-            _context.SaveChanges();
+            var user = GetUser(id);
+            if (user != null)
+            {
+                _context.Users.Remove(user);
+                _context.SaveChanges();
+            }
         }
 
         public void UpdateUser(User user)
         {
             _context.Users.Update(user);
             _context.SaveChanges();
+        }
+
+        public List<Post> GetUserPosts(int userId)
+        {
+            return _context.Posts.Where(p => p.authorId == userId).ToList();
         }
     }
 }

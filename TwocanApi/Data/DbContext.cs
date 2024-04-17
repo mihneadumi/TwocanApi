@@ -16,20 +16,13 @@ namespace TwocanApi.Data
         {
             modelBuilder.Entity<User>()
                 .HasMany(u => u.posts)
-                .WithOne(p => p.AuthorId)
-                .HasForeignKey(p => p.AuthorId)
+                .WithOne(p => p.author)
+                .HasForeignKey(p => p.authorId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             // You can define other relationships here
 
             base.OnModelCreating(modelBuilder);
         }
-
-        // Uncomment this if you want to configure the connection string here
-        // protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        // {
-        //     optionsBuilder.UseMySql("your_mysql_connection_string");
-        //     base.OnConfiguring(optionsBuilder);
-        // }
     }
 }

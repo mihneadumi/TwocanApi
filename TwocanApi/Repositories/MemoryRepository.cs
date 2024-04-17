@@ -43,7 +43,7 @@ public class MemoryRepository: IRepository
             id = 3,
             username = "ye",
             displayName = "Kanye East",
-            posts = [posts[3], posts[9]],
+            posts = [],
             followers = 0,
             following = 0,
             bio = "I am the Greatest artist of all T I M E"
@@ -200,7 +200,7 @@ public class MemoryRepository: IRepository
 
     public void AddUser(User user)
     {
-        user.id = users.Max(u => u.id) + 1;
+        user.id = users.Count > 0 ? users.Max(u => u.id) + 1 : 0;
         users.Add(user);
     }
 
@@ -221,5 +221,10 @@ public class MemoryRepository: IRepository
         dbUser.bio = user.bio;
     }
 
-
+    public List<Post> GetUserPosts(int userId)
+    {
+        var user = users.Find(u => u.id == userId);
+        if (user == null) throw new Exception("User not found");
+        return user.posts;
+    }
 }
