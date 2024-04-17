@@ -1,6 +1,8 @@
 
 using TwocanApi.Repositories;
 using TwocanApi.Services;
+using TwocanApi.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace TwocanApi
 {
@@ -18,6 +20,11 @@ namespace TwocanApi
             builder.Services.AddSwaggerGen();
             builder.Services.AddSingleton<IRepository, MemoryRepository>();
             builder.Services.AddSingleton<IService, Service>();
+
+            builder.Services.AddDbContext<DataContext>(options =>
+            {
+                options.UseSqlServer(builder.Configuration.GetConnectionString("Default"));
+            });
 
             var app = builder.Build();
 
