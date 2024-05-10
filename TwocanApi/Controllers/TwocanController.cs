@@ -40,7 +40,7 @@ namespace TwocanApi.Controllers
                 return BadRequest("Number of bots cannot be negative");
             }
 
-            _service.nrPostsToGenerate = n;
+            _service.UpdateNrOfPosts(n);
             return Ok("Number of bots set to " + n);
         }
 

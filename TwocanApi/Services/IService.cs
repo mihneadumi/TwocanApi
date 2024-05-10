@@ -2,8 +2,9 @@ using TwocanApi.Models;
 namespace TwocanApi.Services;
 public interface IService
 {
-    public int nrPostsToGenerate { get; set; }
+    public static int nrPostsToGenerate { get; set; }
 
+    public void UpdateNrOfPosts(int n);
     public List<Post> GetPosts();
     public List<User> GetUsers();
     public void AddPost(Post post);

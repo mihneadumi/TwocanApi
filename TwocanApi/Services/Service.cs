@@ -6,7 +6,12 @@ namespace TwocanApi.Services;
 public class Service : IService
 {
     IRepository repository;
-    public int nrPostsToGenerate { get; set;} = 0;
+    public static int nrPostsToGenerate { get; set;} = 0;
+
+    public void UpdateNrOfPosts(int n)
+    {
+        nrPostsToGenerate = n;
+    }
 
     public Service(IRepository repository)
     {
@@ -63,7 +68,7 @@ public class Service : IService
 
     public void generatePosts()
     {
-        generatePosts(this.nrPostsToGenerate);
+        generatePosts(nrPostsToGenerate);
     }
 
     public User GetUser(int id)

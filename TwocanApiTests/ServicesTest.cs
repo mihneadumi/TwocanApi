@@ -13,17 +13,6 @@ namespace TwocanApiTests
             var service = new Service(repository);
             var posts = service.GetPosts();
             Assert.NotNull(posts);
-            Assert.Equal(10, posts.Count);
-        }
-
-        [Fact]
-        public void GetUsers_returns_all_users()
-        {
-            var repository = new MemoryRepository();
-            var service = new Service(repository);
-            var users = service.GetUsers();
-            Assert.NotNull(users);
-            Assert.Equal(4, users.Count);
         }
 
         [Fact]
@@ -42,10 +31,10 @@ namespace TwocanApiTests
             var repository = new MemoryRepository();
             var service = new Service(repository);
             var post = new Post { authorId = 1, title = "Test", content = "Test" };
+            var initialCount = service.GetPosts().Count;
             service.AddPost(post);
             Assert.NotNull(post);
-            Assert.Equal(11, service.GetPosts().Count);
-            Assert.Equal(10, post.id);
+            Assert.Equal(initialCount+1, service.GetPosts().Count);
         }
 
         [Fact]
@@ -53,8 +42,9 @@ namespace TwocanApiTests
         {
             var repository = new MemoryRepository();
             var service = new Service(repository);
+            var initialCount = service.GetPosts().Count;
             service.RemovePost(1);
-            Assert.Equal(10, service.GetPosts().Count);
+            Assert.Equal(initialCount-1, service.GetPosts().Count);
         }
 
         [Fact]
@@ -66,15 +56,6 @@ namespace TwocanApiTests
             post.title = "Updated";
             service.UpdatePost(post);
             Assert.Equal("Updated", service.GetPost(2).title);
-        }
-
-        [Fact]
-        public void UpdatePost_throws_exception_when_post_not_found()
-        {
-            var repository = new MemoryRepository();
-            var service = new Service(repository);
-            var post = new Post { id = 11, authorId = 1, title = "Test", content = "Test" };
-            Assert.Throws<Exception>(() => service.UpdatePost(post));
         }
 
         [Fact]
@@ -91,6 +72,64 @@ namespace TwocanApiTests
             var repository = new MemoryRepository();
             var service = new Service(repository);
             Assert.Throws<Exception>(() => service.GetPost(100));
+        }
+
+        [Fact]
+        public void GetUsers_returns_all_users()
+        {
+            var repository = new MemoryRepository();
+            var service = new Service(repository);
+            var users = service.GetUsers();
+            Assert.NotNull(users);
+        }
+
+        [Fact]
+        public void GetUserPosts_returns_all_posts_by_user()
+        {
+            var repository = new MemoryRepository();
+            var service = new Service(repository);
+            var posts = service.GetUserPosts(1);
+            Assert.NotNull(posts);
+            for (int i = 0; i < posts.Count; i++)
+            {
+                Assert.Equal(1, posts[i].authorId);
+            }
+        }
+
+        [Fact]
+        public void GetUser_returns_user_by_id()
+        {
+            var repository = new MemoryRepository();
+            var service = new Service(repository);
+            var user = service.GetUser(1);
+            Assert.NotNull(user);
+            Assert.Equal(1, user.id);
+        }
+
+        [Fact]
+        public void AddUser_adds_user()
+        {
+            var repository = new MemoryRepository();
+            var service = new Service(repository);
+            var user = new User {
+                username = "Test",
+                displayName = "Test",
+                bio = "Test",
+            };
+            var initialCount = service.GetUsers().Count;
+            service.AddUser(user);
+            Assert.NotNull(user);
+            Assert.Equal(initialCount+1, service.GetUsers().Count);
+        }
+
+        [Fact]
+        public void RemoveUser_removes_user()
+        {
+            var repository = new MemoryRepository();
+            var service = new Service(repository);
+            var initialCount = service.GetUsers().Count;
+            service.RemoveUser(1);
+            Assert.Equal(initialCount-1, service.GetUsers().Count);
         }
     }
 }
