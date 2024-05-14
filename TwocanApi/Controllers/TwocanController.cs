@@ -43,6 +43,31 @@ namespace TwocanApi.Controllers
             _service.UpdateNrOfPosts(n);
             return Ok("Number of bots set to " + n);
         }
+        [HttpPost("login")]
+        public IActionResult Login([FromBody] UserDTO userDTO)
+        {
+            if (userDTO == null)
+            {
+                return BadRequest("User object cannot be deserialized");
+            }
+            try
+            {
+                var user = _service.GetUserByUsername(userDTO.username);
+                if (user == null)
+                {
+                    return NotFound("User not found");
+                }
+                if (user.password != userDTO.password)
+                {
+                    return Unauthorized("Incorrect password");
+                }
+                return Ok("Login successful");
+            }
+            catch
+            {
+                return BadRequest("Invalid request");
+            }
+        }
 
         [HttpGet("posts", Name = "GetPosts")]
         public IEnumerable<Post> GetPosts()

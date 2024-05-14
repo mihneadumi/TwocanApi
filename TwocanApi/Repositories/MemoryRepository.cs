@@ -12,6 +12,7 @@ public class MemoryRepository: IRepository
         {
             id = 0,
             username = "aliciaH",
+            password = "password",
             displayName = "Alicia H",
             posts = [],
             followers = 0,
@@ -22,6 +23,7 @@ public class MemoryRepository: IRepository
         {
             id = 1,
             username = "billyBal",
+            password = "password",
             displayName = "Billy Balosu",
             posts = [],
             followers = 0,
@@ -32,6 +34,7 @@ public class MemoryRepository: IRepository
         {
             id = 2,
             username = "SunshineLove123",
+            password = "password",
             displayName = "Samira",
             posts = [],
             followers = 0,
@@ -42,6 +45,7 @@ public class MemoryRepository: IRepository
         {
             id = 3,
             username = "ye",
+            password = "password",
             displayName = "Kanye East",
             posts = [],
             followers = 0,
@@ -205,6 +209,8 @@ public class MemoryRepository: IRepository
     }
 
     public User GetUser(int id) { return users.Find(u => u.id == id)?? throw new Exception("User not found"); }
+
+    public User GetUserByUsername(string username) { return users.Find(u => u.username == username)?? throw new Exception("User not found"); }
 
     public void RemoveUser(int id)
     {

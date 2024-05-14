@@ -113,6 +113,7 @@ namespace TwocanApiTests
             var service = new Service(repository);
             var user = new User {
                 username = "Test",
+                password = "Test",
                 displayName = "Test",
                 bio = "Test",
             };

@@ -76,6 +76,11 @@ public class Service : IService
         return repository.GetUser(id);
     }
 
+    public User GetUserByUsername(string username)
+    {
+        return repository.GetUserByUsername(username);
+    }
+
     public void AddUser(User user)
     {
         repository.AddUser(user);

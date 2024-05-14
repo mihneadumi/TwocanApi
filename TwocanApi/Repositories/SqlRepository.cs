@@ -82,6 +82,11 @@ namespace TwocanApi.Repositories
             return _context.Users.FirstOrDefault(u => u.id == id);
         }
 
+        public User GetUserByUsername(string username)
+        {
+            return _context.Users.FirstOrDefault(u => u.username == username);
+        }
+
         public void RemoveUser(int id)
         {
             var user = GetUser(id);

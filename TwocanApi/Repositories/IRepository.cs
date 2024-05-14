@@ -15,6 +15,7 @@ public interface IRepository
 
     public void AddUser(User user);
     public User GetUser(int id);
+    public User GetUserByUsername(string username);
     public void RemoveUser(int id);
     public void UpdateUser(User user);
     public List<Post> GetUserPosts(int userId);

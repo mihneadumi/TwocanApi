@@ -30,6 +30,15 @@ namespace TwocanApi
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection2"));
             });
 
+            builder.Services.AddDistributedMemoryCache();
+
+            //builder.Services.AddSession(options =>
+            //{
+            //    options.IdleTimeout = TimeSpan.FromSeconds(10);
+            //    options.Cookie.HttpOnly = true;
+            //    options.Cookie.IsEssential = true;
+            //});
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -49,6 +58,8 @@ namespace TwocanApi
             .SetIsOriginAllowed(origin => true));// Allow any origin 
 
             app.UseAuthorization();
+
+            //app.UseSession();
 
             app.MapControllers();
 

@@ -11,6 +11,7 @@ public interface IService
     public void AddUser(User user);
     public Post GetPost(int id);
     public User GetUser(int id);
+    public User GetUserByUsername(string username);
     public List<Post> GetUserPosts(int userId);
     public void RemovePost(int id);
     public void RemoveUser(int id);
