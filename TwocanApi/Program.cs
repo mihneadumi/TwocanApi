@@ -27,7 +27,7 @@ namespace TwocanApi
 
             builder.Services.AddDbContext<DataContext>(options =>
             {
-                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection2"));
             });
 
             var app = builder.Build();
