@@ -2,7 +2,7 @@
 using TwocanApi.Models;
 
 namespace TwocanApi.Repositories;
-public class MemoryRepository: IRepository
+public class MemoryRepository
 {
     static List<Post> posts = [];
 	static List<User> users = [];

@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TwocanApi.Models;
 using TwocanApi.Services;
-using TwocanApi.Repositories;
-using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace TwocanApi.Controllers
 {
@@ -32,6 +33,7 @@ namespace TwocanApi.Controllers
                 await Task.Delay(10000); // simulate delay between events
             }
         }
+
         [HttpPut("setBotsNumber/{n}")]
         public IActionResult SetBotsNumber(int n)
         {
@@ -43,6 +45,7 @@ namespace TwocanApi.Controllers
             _service.UpdateNrOfPosts(n);
             return Ok("Number of bots set to " + n);
         }
+
         [HttpPost("login")]
         public IActionResult Login([FromBody] UserDTO userDTO)
         {
@@ -61,12 +64,32 @@ namespace TwocanApi.Controllers
                 {
                     return Unauthorized("Incorrect password");
                 }
-                return Ok("Login successful");
+
+                string token = _service.GenerateToken(userDTO.username);
+                return Ok(new { token });
             }
-            catch
+            catch (Exception e)
             {
-                return BadRequest("Invalid request");
+                return BadRequest(e.Message);
             }
+        }
+
+        [HttpPost("register")]
+        public IActionResult Register([FromBody] UserRegistrationDTO userDTO)
+        {
+            if (userDTO == null)
+            {
+                return BadRequest("User object cannot be deserialized");
+            }
+            var user = new User
+            {
+                username = userDTO.username,
+                password = userDTO.password,
+                displayName = userDTO.displayName,
+                bio = userDTO.bio,
+            };
+            _service.AddUser(user);
+            return Ok("User added");
         }
 
         [HttpGet("posts", Name = "GetPosts")]
@@ -83,7 +106,7 @@ namespace TwocanApi.Controllers
 
         [HttpPost("posts/add", Name = "AddPost")]
         public IActionResult AddPost([FromBody] PostDTO postDTO)
-        {   
+        {
             if (postDTO == null)
             {
                 return BadRequest("Post object cannot be deserialized");
@@ -105,7 +128,8 @@ namespace TwocanApi.Controllers
             try
             {
                 _service.RemovePost(postId);
-            } catch
+            }
+            catch
             {
                 return NotFound("Post not found");
             }
@@ -113,16 +137,16 @@ namespace TwocanApi.Controllers
         }
 
         [HttpPut("posts/update", Name = "UpdatePost")]
-        public IActionResult UpdatePost([FromBody] PostDTO PostDTO)
+        public IActionResult UpdatePost([FromBody] PostDTO postDTO)
         {
             try
             {
-                var oldPost = _service.GetPost(PostDTO.id??0);
+                var oldPost = _service.GetPost(postDTO.id ?? 0);
                 var post = new Post
                 {
-                    id = PostDTO.id??0,
-                    title = PostDTO.title,
-                    content = PostDTO.content,
+                    id = postDTO.id ?? 0,
+                    title = postDTO.title,
+                    content = postDTO.content,
                     authorId = oldPost.authorId,
                     date = oldPost.date,
                     author = _service.GetUser(oldPost.authorId),
@@ -130,7 +154,7 @@ namespace TwocanApi.Controllers
                 };
                 _service.UpdatePost(post);
             }
-            catch (Exception e) 
+            catch (Exception e)
             {
                 return NotFound(e.Message);
             }

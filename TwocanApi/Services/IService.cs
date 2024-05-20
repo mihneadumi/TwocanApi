@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Mvc;
 using TwocanApi.Models;
 namespace TwocanApi.Services;
 public interface IService
@@ -18,6 +19,10 @@ public interface IService
     public void UpdatePost(Post post);
     public void UpdateUser(User user);
     public void generatePosts(int n);
-
     public void generatePosts();
+
+    public string GenerateToken(string username);
+    public bool ValidateToken(string token);
+    public void RemoveSession(string token);
+
 }

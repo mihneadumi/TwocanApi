@@ -1,8 +1,8 @@
-
+using Microsoft.EntityFrameworkCore;
+using TwocanApi.Data;
 using TwocanApi.Repositories;
 using TwocanApi.Services;
-using TwocanApi.Data;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace TwocanApi
 {
@@ -13,14 +13,9 @@ namespace TwocanApi
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-
             builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-
-            //builder.Services.AddSingleton<IRepository, MemoryRepository>();
-            //builder.Services.AddSingleton<IService, Service>();
 
             builder.Services.AddScoped<IRepository, SqlRepository>();
             builder.Services.AddScoped<IService, Service>();
@@ -32,12 +27,12 @@ namespace TwocanApi
 
             builder.Services.AddDistributedMemoryCache();
 
-            //builder.Services.AddSession(options =>
-            //{
-            //    options.IdleTimeout = TimeSpan.FromSeconds(10);
-            //    options.Cookie.HttpOnly = true;
-            //    options.Cookie.IsEssential = true;
-            //});
+            builder.Services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromSeconds(10);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
 
             var app = builder.Build();
 
@@ -51,15 +46,17 @@ namespace TwocanApi
             app.UseHttpsRedirection();
 
             app.UseCors(x => x
-            .AllowAnyMethod()
-            .AllowAnyHeader()
-            .AllowCredentials()
-            //.WithOrigins("https://localhost:44351")); // Allow only this origin can also have multiple origins seperated with comma
-            .SetIsOriginAllowed(origin => true));// Allow any origin 
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .AllowCredentials()
+                .SetIsOriginAllowed(origin => true));
 
             app.UseAuthorization();
 
-            //app.UseSession();
+            app.UseSession();
+
+            // Add middleware to the pipeline
+            app.UseMiddleware<TokenValidationMiddleware>();
 
             app.MapControllers();
 

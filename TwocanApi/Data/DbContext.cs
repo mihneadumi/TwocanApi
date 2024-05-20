@@ -11,6 +11,7 @@ namespace TwocanApi.Data
 
         public DbSet<Post> Posts { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<Session> Sessions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -20,7 +21,8 @@ namespace TwocanApi.Data
                 .HasForeignKey(p => p.authorId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // You can define other relationships here
+            modelBuilder.Entity<Session>()
+                .HasKey(s => s.username);
 
             base.OnModelCreating(modelBuilder);
         }

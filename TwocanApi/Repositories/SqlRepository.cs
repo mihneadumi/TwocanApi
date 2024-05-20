@@ -107,5 +107,32 @@ namespace TwocanApi.Repositories
         {
             return _context.Posts.Where(p => p.authorId == userId).ToList();
         }
+
+        public void AddSession(Session session)
+        {
+            if (_context.Sessions.Any(s => s.token == session.token))
+            {
+                RemoveSession(session.token);
+            }
+            _context.Sessions.Add(session);
+            _context.SaveChanges();
+        }
+
+        public bool ValidToken(string token)
+        {
+            return _context.Sessions.Any(s => s.token == token);
+        }
+
+        public void RemoveSession(string token)
+        {
+            var session = _context.Sessions.FirstOrDefault(s => s.token == token);
+            if (session != null)
+            {
+                _context.Sessions.Remove(session);
+                _context.SaveChanges();
+                return;
+            }
+            throw new Exception("Session not found");
+        }
     }
 }

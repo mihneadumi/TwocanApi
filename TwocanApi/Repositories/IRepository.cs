@@ -19,4 +19,7 @@ public interface IRepository
     public void RemoveUser(int id);
     public void UpdateUser(User user);
     public List<Post> GetUserPosts(int userId);
+    public bool ValidToken(string token);
+    public void RemoveSession(string token);
+    public void AddSession(Session session);
 }

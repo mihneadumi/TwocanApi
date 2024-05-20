@@ -100,4 +100,24 @@ public class Service : IService
     {
         return repository.GetUserPosts(userId);
     }
+
+    // session management
+    public string GenerateToken(string username)
+    {
+        string token = Faker.RandomNumber.Next(10000000, 99999999).ToString();
+        Session session = new Session();
+        session.token = token;
+        session.username = username;
+        repository.AddSession(session);
+        return token;
+    }
+
+    public bool ValidateToken(string token)
+    {
+        return repository.ValidToken(token);
+    }
+    public void RemoveSession(string token)
+    {
+        repository.RemoveSession(token);
+    }
 }

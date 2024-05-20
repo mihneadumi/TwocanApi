@@ -21,3 +21,11 @@ public class UserDTO
     public required string password { get; set; }
 
 }
+
+public class UserRegistrationDTO
+{
+    public required string username { get; set; }
+    public required string password { get; set; }
+    public required string displayName { get; set; }
+    public required string bio { get; set; }
+}
