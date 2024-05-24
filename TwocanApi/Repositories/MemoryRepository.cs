@@ -2,10 +2,11 @@
 using TwocanApi.Models;
 
 namespace TwocanApi.Repositories;
-public class MemoryRepository
+public class MemoryRepository: IRepository
 {
     static List<Post> posts = [];
 	static List<User> users = [];
+    static List<Session> sessions = [];
     public MemoryRepository(){
         #region mockUsers
         var user1 = new User
@@ -232,5 +233,33 @@ public class MemoryRepository
         var user = users.Find(u => u.id == userId);
         if (user == null) throw new Exception("User not found");
         return user.posts;
+    }
+
+    bool IRepository.ValidToken(string token)
+    {
+        if (token == null) return false;
+        for (int i = 0; i < sessions.Count; i++)
+        {
+            if (sessions[i].token == token) return true;
+        }
+        return false;
+    }
+
+    void IRepository.RemoveSession(string token)
+    { 
+        for (int i = 0; i < sessions.Count; i++)
+        {
+            if (sessions[i].token == token)
+            {
+                sessions.RemoveAt(i);
+                return;
+            }
+        }
+    }
+
+    void IRepository.AddSession(Session session)
+    {
+        session.token = Guid.NewGuid().ToString();
+        sessions.Add(session);
     }
 }
