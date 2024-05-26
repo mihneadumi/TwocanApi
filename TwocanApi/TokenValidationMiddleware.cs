@@ -19,6 +19,12 @@ public class TokenValidationMiddleware
             return;
         }
 
+        if (context.Request.Path.StartsWithSegments("/twocan/postStream"))
+        {
+            await _next(context);
+            return;
+        }
+
         if (!context.Request.Headers.TryGetValue("Authorization", out var token))
         {
             context.Response.StatusCode = 401; // Unauthorized
