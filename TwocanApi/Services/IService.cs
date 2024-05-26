@@ -23,6 +23,6 @@ public interface IService
 
     public Session GenerateSession(string username);
     public bool ValidateToken(string token);
-    public void RemoveSession(string token);
+    public void RemoveSession(int userId);
 
 }

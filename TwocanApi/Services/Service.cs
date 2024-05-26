@@ -119,8 +119,8 @@ public class Service : IService
     {
         return repository.ValidToken(token);
     }
-    public void RemoveSession(string token)
+    public void RemoveSession(int userId)
     {
-        repository.RemoveSession(token);
+        repository.RemoveSession(userId);
     }
 }

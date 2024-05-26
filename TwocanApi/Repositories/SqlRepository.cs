@@ -110,9 +110,9 @@ namespace TwocanApi.Repositories
 
         public void AddSession(Session session)
         {
-            if (_context.Sessions.Any(s => s.token == session.token))
+            if (_context.Sessions.Any(s => s.userId == session.userId))
             {
-                RemoveSession(session.token);
+                RemoveSession(session.userId);
             }
             _context.Sessions.Add(session);
             _context.SaveChanges();
@@ -123,9 +123,9 @@ namespace TwocanApi.Repositories
             return _context.Sessions.Any(s => s.token == token);
         }
 
-        public void RemoveSession(string token)
+        public void RemoveSession(int userId)
         {
-            var session = _context.Sessions.FirstOrDefault(s => s.token == token);
+            var session = _context.Sessions.FirstOrDefault(s => s.userId == userId);
             if (session != null)
             {
                 _context.Sessions.Remove(session);

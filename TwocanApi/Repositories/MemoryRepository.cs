@@ -245,11 +245,11 @@ public class MemoryRepository: IRepository
         return false;
     }
 
-    void IRepository.RemoveSession(string token)
+    void IRepository.RemoveSession(int userId)
     { 
         for (int i = 0; i < sessions.Count; i++)
         {
-            if (sessions[i].token == token)
+            if (sessions[i].userId == userId)
             {
                 sessions.RemoveAt(i);
                 return;
