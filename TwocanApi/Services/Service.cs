@@ -102,7 +102,7 @@ public class Service : IService
     }
 
     // session management
-    public string GenerateToken(string username)
+    public Session GenerateSession(string username)
     {
         string token = Faker.RandomNumber.Next(10000000, 99999999).ToString();
         var id = repository.GetUserByUsername(username).id;
@@ -111,7 +111,7 @@ public class Service : IService
         session.username = username;
         session.userId = id;
         repository.AddSession(session);
-        return token;
+        return session;
     }
 
     public bool ValidateToken(string token)

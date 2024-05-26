@@ -65,8 +65,8 @@ namespace TwocanApi.Controllers
                     return Unauthorized("Incorrect password");
                 }
 
-                string token = _service.GenerateToken(userDTO.username);
-                return Ok(new { token });
+                Session session = _service.GenerateSession(userDTO.username);
+                return Ok(new { session });
             }
             catch (Exception e)
             {

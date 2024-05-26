@@ -21,7 +21,7 @@ public interface IService
     public void generatePosts(int n);
     public void generatePosts();
 
-    public string GenerateToken(string username);
+    public Session GenerateSession(string username);
     public bool ValidateToken(string token);
     public void RemoveSession(string token);
 
