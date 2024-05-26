@@ -73,6 +73,10 @@ namespace TwocanApi.Repositories
 
         public void AddUser(User user)
         {
+            if (_context.Users.Any(u => u.username == user.username))
+            {
+                throw new Exception("Username already taken");
+            }
             _context.Users.Add(user);
             _context.SaveChanges();
         }

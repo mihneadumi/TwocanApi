@@ -73,23 +73,47 @@ namespace TwocanApi.Controllers
                 return BadRequest(e.Message);
             }
         }
+        [HttpPost("logout")]
+        public IActionResult Logout([FromBody] int userId)
+        {
+            if (userId == null)
+            {
+                return BadRequest("Session object cannot be deserialized");
+            }
+            try
+            {
+                _service.RemoveSession(userId);
+                return Ok("Session removed");
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
 
         [HttpPost("register")]
         public IActionResult Register([FromBody] UserRegistrationDTO userDTO)
         {
-            if (userDTO == null)
+            try
             {
-                return BadRequest("User object cannot be deserialized");
+                if (userDTO == null)
+                {
+                    return BadRequest("User object cannot be deserialized");
+                }
+                var user = new User
+                {
+                    username = userDTO.username,
+                    password = userDTO.password,
+                    displayName = userDTO.displayName,
+                    bio = userDTO.bio,
+                };
+                _service.AddUser(user);
+                return Ok("User added");
             }
-            var user = new User
+            catch (Exception e)
             {
-                username = userDTO.username,
-                password = userDTO.password,
-                displayName = userDTO.displayName,
-                bio = userDTO.bio,
-            };
-            _service.AddUser(user);
-            return Ok("User added");
+                return BadRequest(e.Message);
+            }
         }
 
         [HttpGet("posts", Name = "GetPosts")]
