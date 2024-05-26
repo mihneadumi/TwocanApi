@@ -78,6 +78,9 @@ namespace TwocanApi.Migrations
                     b.Property<string>("username")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+                    b.Property<string>("password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("id");
 

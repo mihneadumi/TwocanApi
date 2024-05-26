@@ -105,9 +105,11 @@ public class Service : IService
     public string GenerateToken(string username)
     {
         string token = Faker.RandomNumber.Next(10000000, 99999999).ToString();
+        var id = repository.GetUserByUsername(username).id;
         Session session = new Session();
         session.token = token;
         session.username = username;
+        session.userId = id;
         repository.AddSession(session);
         return token;
     }
