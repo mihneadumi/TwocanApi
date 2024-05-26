@@ -22,7 +22,8 @@ namespace TwocanApi.Data
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Session>()
-                .HasKey(s => s.userId);
+                .HasKey(s => s.token);
+
 
             base.OnModelCreating(modelBuilder);
         }

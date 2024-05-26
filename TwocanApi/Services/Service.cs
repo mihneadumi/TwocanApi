@@ -109,6 +109,7 @@ public class Service : IService
         Session session = new Session();
         session.token = token;
         session.username = username;
+        System.Console.WriteLine(id);
         session.userId = id;
         repository.AddSession(session);
         return session;
